@@ -13,6 +13,15 @@ export class Tutor extends Document {
   @Prop({ required: true, unique: true })
   userName: string;
 
+  @Prop({ required: true, unique: true })
+  email: string;
+
+  @Prop({ required: true })
+  password: string;
+
+  @Prop({ required: false })
+  imageUrl: string;
+
   @Prop({ type: SocialMedia, required: false })
   socialMedia: SocialMedia;
 
