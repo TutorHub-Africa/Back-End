@@ -7,7 +7,7 @@ import { TutorAuthService } from './tutor-auth.service';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule,
     JwtModule.registerAsync({
       global: true,
       inject: [ConfigService],
