@@ -100,8 +100,15 @@ export class TutorService {
     return await tutor.save();
   }
 
-  update(id: number, updateTutorDto: UpdateTutorDto) {
-    return `This action updates a #${id} tutor`;
+  async update(id: string, updateTutorDto: UpdateTutorDto) {
+    const tutorFound = await this.findOne(id);
+    if (!tutorFound) {
+      throw new NotFoundException('Tutor not found');
+    }
+
+    return await this.tutorModel.findByIdAndUpdate(id, updateTutorDto, {
+      new: true,
+    });
   }
 
   remove(id: number) {

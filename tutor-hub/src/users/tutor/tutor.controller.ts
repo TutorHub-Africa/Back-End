@@ -65,9 +65,25 @@ export class TutorController {
     return this.tutorService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTutorDto: UpdateTutorDto) {
-    return this.tutorService.update(+id, updateTutorDto);
+  @Patch('/update-profile')
+  @UseGuards(TutorJwtAuthGuard)
+  update(@Request() req, @Body() updateTutorDto: UpdateTutorDto) {
+    const id = req.user.sub;
+    return this.tutorService.update(id, updateTutorDto);
+  }
+
+  @Patch('/update-bio')
+  @UseGuards(TutorJwtAuthGuard)
+  updateBio(@Request() req, @Body() bio: UpdateTutorDto) {
+    const id = req.user.sub;
+    return this.tutorService.update(id, bio);
+  }
+
+  @Patch('/update-skills')
+  @UseGuards(TutorJwtAuthGuard)
+  updateSkills(@Request() req, @Body() skills: UpdateTutorDto) {
+    const id = req.user.sub;
+    return this.tutorService.update(id, skills);
   }
 
   @Delete(':id')
