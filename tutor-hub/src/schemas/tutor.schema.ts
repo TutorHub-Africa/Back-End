@@ -19,6 +19,12 @@ export class Tutor extends Document {
   @Prop({ required: true })
   password: string;
 
+  @Prop({ requried: false })
+  phoneNumber: string;
+
+  @Prop({ required: false })
+  shortDescription: string;
+
   @Prop({ required: false })
   imageUrl: string;
 

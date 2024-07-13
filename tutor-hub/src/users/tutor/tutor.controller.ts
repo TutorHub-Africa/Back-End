@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Controller,
   Get,
@@ -6,11 +7,19 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
+  UseInterceptors,
+  UseGuards,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 import { TutorService } from './tutor.service';
 import { CreateTutorDto } from './dto/create-tutor.dto';
 import { UpdateTutorDto } from './dto/update-tutor.dto';
 import { LoginTutorDto } from './dto/login-tutor.dto';
+import { TutorJwtAuthGuard } from 'src/auth/tutor-auth/guards/jwt-tutorAuth.guard';
+import { v4 as uuidv4 } from 'uuid';
 
 @Controller('tutor')
 export class TutorController {
@@ -24,6 +33,26 @@ export class TutorController {
   @Post('/login')
   logIn(@Body() loginTutorDto: LoginTutorDto) {
     return this.tutorService.logIn(loginTutorDto);
+  }
+
+  @Post('/image')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: 'src/images/tutorProfiles',
+        filename: (req, file, callback) => {
+          // Generate a unique filename
+          const fileExtension = file.originalname.split('.').pop();
+          const filename = `${uuidv4()}.${fileExtension}`;
+          callback(null, filename);
+          return filename;
+        },
+      }),
+    }),
+  )
+  @UseGuards(TutorJwtAuthGuard)
+  async uploadImage(@Request() req, @UploadedFile() file: Express.Multer.File) {
+    return this.tutorService.AddImagePath(req.user.sub, file.filename);
   }
 
   @Get()

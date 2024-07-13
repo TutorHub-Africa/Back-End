@@ -89,6 +89,17 @@ export class TutorService {
     return tutorFound;
   }
 
+  async AddImagePath(id: string, filename: string) {
+    if (!id) {
+      return 'No cinema Id provided';
+    }
+
+    const tutor = await this.findOne(id);
+    tutor.imageUrl = `src/images/tutorProfiles/${filename}`;
+
+    return await tutor.save();
+  }
+
   update(id: number, updateTutorDto: UpdateTutorDto) {
     return `This action updates a #${id} tutor`;
   }
