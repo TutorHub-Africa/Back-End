@@ -1,10 +1,11 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
-import { SignInStudentDto } from './dto/signin-student.dto';
+import { LogInStudentDto } from './dto/login-student.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Student } from '../../schemas/student.schema';
@@ -34,8 +35,8 @@ export class StudentsService {
     });
     return createdStudent.save();
   }
-  async signIn(signInStudentDto: SignInStudentDto) {
-    const { email, userName, password } = signInStudentDto;
+  async logIn(logInStudentDto: LogInStudentDto) {
+    const { email, userName, password } = logInStudentDto;
     const student = await this.StudentModel.findOne({
       email,
       userName,
@@ -57,15 +58,44 @@ export class StudentsService {
     return token;
   }
 
-  findAll() {
-    return `This action returns a  student`;
+  async findAll() {
+    const tutorsFound = await this.StudentModel.find();
+    if (!tutorsFound) {
+      throw new NotFoundException('No tutors found');
+    }
+    return tutorsFound;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} student`;
+  async findOne(id: string) {
+    const studentFound = await this.StudentModel.findOne({
+      $or: [{ _id: id }],
+    });
+
+    if (!studentFound) {
+      throw new NotFoundException('Tutor not found');
+    }
+
+    return studentFound;
   }
-  update(id: number, updateStudentDto: UpdateStudentDto) {
-    return `This action returns a #${id} student`;
+  async AddImagePath(id: string, filename: string) {
+    if (!id) {
+      return 'No image Id provided';
+    }
+
+    const student = await this.StudentModel.findOne({ _id: id });
+    student.imageUrl = `src/images/tutorProfiles/${filename}`;
+
+    return await student.save();
+  }
+  async update(id: string, updateStudentDto: UpdateStudentDto) {
+    const tutorFound = await this.findOne(id);
+    if (!tutorFound) {
+      throw new NotFoundException('Tutor not found');
+    }
+
+    return await this.StudentModel.findByIdAndUpdate(id, updateStudentDto, {
+      new: true,
+    });
   }
 
   remove(id: number) {

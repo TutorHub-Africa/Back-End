@@ -7,6 +7,7 @@ export class Student extends Document {
 
   @Prop({ required: true })
   lastName: string;
+
   @Prop({ required: true, unique: true })
   userName: string;
 
@@ -15,10 +16,13 @@ export class Student extends Document {
 
   @Prop({ required: true, unique: true })
   email: string;
-  @Prop({ default: [] })
-  courses: [];
+
   @Prop({ required: true })
   age: Number;
+
+  @Prop({ required: false })
+  imageUrl: string;
+
   parent: string;
 }
 

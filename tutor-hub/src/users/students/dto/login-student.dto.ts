@@ -6,7 +6,7 @@ import {
   IsNumber,
 } from 'class-validator';
 
-export class SignInStudentDto {
+export class LogInStudentDto {
   @IsNotEmpty()
   @IsString()
   userName: string;

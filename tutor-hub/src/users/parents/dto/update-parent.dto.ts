@@ -1,4 +1,12 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateParentDto } from './create-parent.dto';
+import { IsString, IsOptional, IsNumber } from 'class-validator';
+import { SocialMedia } from 'src/schemas/socialMedial.schema';
 
-export class UpdateParentDto extends PartialType(CreateParentDto) {}
+export class UpdateParentDto {
+  @IsString()
+  @IsOptional()
+  firstName: string;
+
+  @IsString()
+  @IsOptional()
+  lastName: string;
+}

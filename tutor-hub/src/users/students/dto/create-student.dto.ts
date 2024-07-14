@@ -4,6 +4,7 @@ import {
   Length,
   IsEmail,
   IsNumber,
+  IsOptional,
 } from 'class-validator';
 
 export class CreateStudentDto {
@@ -30,5 +31,6 @@ export class CreateStudentDto {
   @IsNumber()
   age: number;
 
+  @IsOptional()
   parent: string;
 }

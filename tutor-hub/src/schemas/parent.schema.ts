@@ -16,6 +16,10 @@ export class Parent extends Document {
 
   @Prop({ required: true, unique: true })
   email: string;
+
+  @Prop({ required: false })
+  imageUrl: string;
+
   @Prop({ default: [] })
   children: [];
 }
