@@ -9,15 +9,20 @@ import {
 } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
+import { SignInStudentDto } from './dto/signin-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 
 @Controller('students')
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
-  @Post()
-  create(@Body() createStudentDto: CreateStudentDto) {
-    return this.studentsService.create(createStudentDto);
+  @Post('singup')
+  createStudent(@Body() createStudentDto: CreateStudentDto) {
+    return this.studentsService.createStudent(createStudentDto);
+  }
+  @Post('singin')
+  signIn(@Body() signInStudentDto: SignInStudentDto) {
+    return this.studentsService.signIn(signInStudentDto);
   }
 
   @Get()

@@ -6,13 +6,7 @@ import {
   IsNumber,
 } from 'class-validator';
 
-export class CreateStudentDto {
-  @IsNotEmpty()
-  @IsString()
-  firstName: string;
-  @IsNotEmpty()
-  @IsString()
-  lastName: string;
+export class SignInStudentDto {
   @IsNotEmpty()
   @IsString()
   userName: string;
@@ -25,10 +19,4 @@ export class CreateStudentDto {
   @IsString()
   @Length(6)
   password: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  age: number;
-
-  parent: string;
 }

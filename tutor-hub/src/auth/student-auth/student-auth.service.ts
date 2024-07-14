@@ -24,7 +24,7 @@ export class StudentAuthService {
       },
     );
 
-    return { parentToken: token };
+    return { studentToken: token };
   }
 
   async hashPassword(password: string) {
