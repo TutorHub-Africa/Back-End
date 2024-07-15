@@ -16,3 +16,20 @@ export class CreateTutorDto {
   @IsString()
   password: string;
 }
+
+export class createTutorGoogleDto {
+  @IsString()
+  googleId: string;
+
+  @IsString()
+  firstName: string;
+
+  @IsString()
+  lastName: string;
+
+  @IsString()
+  userName: string;
+
+  @IsEmail()
+  email: string;
+}

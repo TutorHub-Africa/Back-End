@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TutorService } from './tutor.service';
 import { TutorController } from './tutor.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -8,9 +8,12 @@ import { TutorAuthModule } from 'src/auth/tutor-auth/tutor-auth.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Tutor.name, schema: TutorSchema }]),
-    TutorAuthModule,
+    forwardRef(() => TutorAuthModule),
   ],
   controllers: [TutorController],
   providers: [TutorService],
+  exports: [
+    MongooseModule.forFeature([{ name: Tutor.name, schema: TutorSchema }]),
+  ],
 })
 export class TutorModule {}

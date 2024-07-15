@@ -7,3 +7,11 @@ export class LoginTutorDto {
   @IsString()
   password: string;
 }
+
+export class LoginTutorGoogleDto {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  googleId: string;
+}

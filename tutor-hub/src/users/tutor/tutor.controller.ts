@@ -15,11 +15,12 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { TutorService } from './tutor.service';
-import { CreateTutorDto } from './dto/create-tutor.dto';
+import { CreateTutorDto, createTutorGoogleDto } from './dto/create-tutor.dto';
 import { UpdateTutorDto } from './dto/update-tutor.dto';
-import { LoginTutorDto } from './dto/login-tutor.dto';
+import { LoginTutorDto, LoginTutorGoogleDto } from './dto/login-tutor.dto';
 import { TutorJwtAuthGuard } from 'src/auth/tutor-auth/guards/jwt-tutorAuth.guard';
 import { v4 as uuidv4 } from 'uuid';
+import { TutorGoogleAuthGuard } from 'src/auth/tutor-auth/guards/tutorAuthGoogle.guard';
 
 @Controller('tutor')
 export class TutorController {
@@ -33,6 +34,18 @@ export class TutorController {
   @Post('/login')
   logIn(@Body() loginTutorDto: LoginTutorDto) {
     return this.tutorService.logIn(loginTutorDto);
+  }
+
+  @Get('google/signin')
+  @UseGuards(TutorGoogleAuthGuard)
+  googleSignIn(@Request() req) {
+    return { msg: 'Google Sign In' };
+  }
+
+  @Get('google/redirect')
+  @UseGuards(TutorGoogleAuthGuard)
+  async googleRedirect(@Request() req) {
+    return req.user.tutorToken;
   }
 
   @Post('/image')
@@ -55,13 +68,15 @@ export class TutorController {
     return this.tutorService.AddImagePath(req.user.sub, file.filename);
   }
 
-  @Get()
+  @Get('/all')
   findAll() {
     return this.tutorService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @Get()
+  @UseGuards(TutorJwtAuthGuard)
+  findOne(@Request() req) {
+    const id = req.user.sub;
     return this.tutorService.findOne(id);
   }
 
