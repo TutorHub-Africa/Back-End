@@ -4,7 +4,7 @@ import { Document } from 'mongoose';
 @Schema()
 export class EnrolledStudent extends Document {
   @Prop({ required: true })
-  studentId?: string;
+  studentId: string;
 
   @Prop({ required: false })
   googleUrl: string;

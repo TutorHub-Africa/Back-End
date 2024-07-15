@@ -12,13 +12,14 @@ import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { TutorJwtAuthGuard } from 'src/auth/tutor-auth/guards/jwt-tutorAuth.guard';
+import { EnrollCourseDto } from './dto/enroll-cours.dto';
 
 @Controller('course')
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
   @Post()
-  @UseGuards(TutorJwtAuthGuard)
+  // @UseGuards(TutorJwtAuthGuard)
   create(@Body() createCourseDto: CreateCourseDto) {
     return this.courseService.create(createCourseDto);
   }
@@ -32,9 +33,10 @@ export class CourseController {
   findOne(@Param('id') id: string) {
     return this.courseService.findOne(id);
   }
-  @Patch(':id')
-  enroll(@Param('id') id: string) {
-    return this.courseService.enroll(id);
+
+  @Patch('enroll/:id')
+  enroll(@Param('id') id: string, @Body() enrollCourseDto: EnrollCourseDto) {
+    return this.courseService.enroll(id, enrollCourseDto);
   }
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {

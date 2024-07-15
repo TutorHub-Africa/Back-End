@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { EnrolledStudent } from './enrolledStudent.schema';
+
 @Schema()
 export class Course extends Document {
   @Prop({ required: true })
@@ -11,11 +13,11 @@ export class Course extends Document {
   @Prop({ required: true })
   tutorId: string;
 
-  @Prop({ type: [String], default: [] })
-  privateStudents: string[];
+  @Prop({ type: [EnrolledStudent], default: [] })
+  privateStudents: EnrolledStudent[];
 
-  @Prop({ type: [String], default: [] })
-  groupStudents: string[];
+  @Prop({ type: [EnrolledStudent], default: [] })
+  groupStudents: EnrolledStudent[];
 }
 
 export const CourseSchema = SchemaFactory.createForClass(Course);
