@@ -6,6 +6,9 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { EnrollCourseDto } from './dto/enroll-cours.dto';
 import { EnrolledStudent } from 'src/schemas/enrolledStudent.schema';
+import { FilterCourseDto } from './dto/filter-course.dto';
+import { AddCommentDto } from './dto/add-comment.dto';
+import { Comment, CommentSchema } from 'src/schemas/comment.schema';
 
 @Injectable()
 export class CourseService {
@@ -13,16 +16,39 @@ export class CourseService {
     @InjectModel(Course.name) private CourseModel: Model<Course>,
     @InjectModel(EnrolledStudent.name)
     private EnrolledStudentModel: Model<EnrolledStudent>,
+    @InjectModel(Comment.name) private readonly CommentModel: Model<Comment>,
   ) {}
   async create(createCourseDto: CreateCourseDto) {
-    const { tutorId, title, description } = createCourseDto;
+    const {
+      tutorId,
+      title,
+      description,
+      grade,
+      durationPerDay,
+      evaluation,
+      seatsRemaining,
+      resource,
+    } = createCourseDto;
+
+    // Check if the course already exists for the same tutor and title
     const existingCourse = await this.CourseModel.findOne({ tutorId, title });
     if (existingCourse) {
       throw new Error('Course already exists');
     }
+
+    // Create a new course instance
     const createdCourse = new this.CourseModel({
-      ...createCourseDto,
+      tutorId,
+      title,
+      description,
+      grade,
+      durationPerDay,
+      evaluation,
+      seatsRemaining,
+      resource,
+      comments: [],
     });
+
     return await createdCourse.save();
   }
 
@@ -32,6 +58,38 @@ export class CourseService {
       throw new Error('No courses found');
     }
     return courses;
+  }
+  async filterCourses(filterCourseDto: FilterCourseDto) {
+    const { tutorId, grade, evaluation, durationPerDay, rate } =
+      filterCourseDto;
+
+    const filterQuery: any = {};
+
+    if (tutorId) {
+      filterQuery.tutorId = tutorId;
+    }
+
+    if (grade) {
+      filterQuery.grade = +grade;
+    }
+
+    if (evaluation !== undefined) {
+      filterQuery.evaluation = evaluation;
+    }
+
+    if (durationPerDay) {
+      filterQuery.durationPerDay = durationPerDay;
+    }
+
+    if (rate !== undefined) {
+      filterQuery.rate = rate;
+    }
+    const sortBy = 'rate';
+    const sortOrder = 'desc';
+
+    return await this.CourseModel.find(filterQuery)
+      .sort({ [sortBy]: sortOrder })
+      .exec();
   }
 
   async findOne(id: string) {
@@ -46,26 +104,72 @@ export class CourseService {
     if (!foundCourse) {
       throw new Error('Course not found');
     }
+    if (foundCourse.seatsRemaining === 0) {
+      throw new Error('No seats available');
+    }
     const student = await this.EnrolledStudentModel.create({
       studentId: enrollCourseDto.studentId,
       googleUrl: enrollCourseDto.googleUrl,
     });
 
-    if (enrollCourseDto.private) {
-      const foundStudent = await foundCourse.privateStudents.find(
-        (student) => student.studentId === enrollCourseDto.studentId,
-      );
-      if (foundStudent) {
-        throw new Error('Student already enrolled');
-      }
-      foundCourse.privateStudents.push(student);
-    } else {
-      const foundStudent = await foundCourse.groupStudents.find(
-        (student) => student.studentId === enrollCourseDto.studentId,
-      );
-      foundCourse.groupStudents.push(student);
+    const foundStudent = foundCourse.enrolledStudents.find(
+      (student) => student.studentId === enrollCourseDto.studentId,
+    );
+    if (foundStudent) {
+      throw new Error('Student already enrolled');
     }
+    foundCourse.enrolledStudents.push(student);
+    foundCourse.seatsRemaining -= 1;
+
     return await foundCourse.save();
+  }
+  async dropOut(id: string, studentId: string) {
+    const foundCourse = await this.CourseModel.findOne({ _id: id });
+    if (!foundCourse) {
+      throw new Error('Course not found');
+    }
+    const foundStudent = foundCourse.enrolledStudents.find(
+      (student) => student.studentId === studentId,
+    );
+    if (!foundStudent) {
+      throw new Error('Student not enrolled');
+    }
+    foundCourse.enrolledStudents = foundCourse.enrolledStudents.filter(
+      (student) => student.studentId !== studentId,
+    );
+    foundCourse.seatsRemaining += 1;
+
+    return await foundCourse.save();
+  }
+  async addComment(courseId: string, addCommentDto: AddCommentDto) {
+    const { studentId, studentName, text, rating } = addCommentDto;
+    const course = await this.CourseModel.findById(courseId);
+    if (!course) {
+      throw new Error('Course not found');
+    }
+    course.comments = course.comments.filter(
+      (comment) => comment.studentId !== studentId,
+    );
+    const comment = await this.CommentModel.create({
+      studentId,
+      studentName,
+      text,
+      rating,
+    });
+    course.comments.push(comment);
+
+    await course.save();
+
+    return comment;
+  }
+  async getComments(courseId: string) {
+    const course =
+      await this.CourseModel.findById(courseId).populate('comments');
+    if (!course) {
+      throw new Error('Course not found');
+    }
+
+    return course.comments;
   }
 
   update(id: number, updateCourseDto: UpdateCourseDto) {

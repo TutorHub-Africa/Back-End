@@ -8,8 +8,4 @@ export class EnrollCourseDto {
   @IsNotEmpty()
   @IsString()
   studentId: string;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  private: boolean;
 }

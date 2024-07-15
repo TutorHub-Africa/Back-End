@@ -9,10 +9,12 @@ import {
   EnrolledStudent,
   EnrolledStudentSchema,
 } from 'src/schemas/enrolledStudent.schema';
+import { Comment, CommentSchema } from 'src/schemas/comment.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Course.name, schema: CourseSchema }]),
+    MongooseModule.forFeature([{ name: Comment.name, schema: CommentSchema }]),
     MongooseModule.forFeature([
       { name: EnrolledStudent.name, schema: EnrolledStudentSchema },
     ]),
