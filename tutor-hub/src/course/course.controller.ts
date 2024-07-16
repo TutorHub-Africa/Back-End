@@ -40,10 +40,6 @@ export class CourseController {
   ): Promise<Course[]> {
     return this.courseService.filterCourses(filterCourseDto);
   }
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.courseService.findOne(id);
-  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
