@@ -69,7 +69,7 @@ export class CourseService {
       filterQuery.tutorId = tutorId;
     }
     if (title) {
-      filterQuery.title = title;
+      filterQuery.title = { $regex: title, $options: 'i' };
     }
 
     if (grade) {
