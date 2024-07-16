@@ -17,7 +17,7 @@ export class Student extends Document {
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   age: number;
 
   @Prop({ required: false })

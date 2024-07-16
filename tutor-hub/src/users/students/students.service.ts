@@ -21,7 +21,7 @@ export class StudentsService {
   ) {}
 
   async createStudent(createStudentDto: CreateStudentDto) {
-    const { firstName, lastName, email, userName, password, age, parent } =
+    const { firstName, lastName, email, userName, password, parent } =
       createStudentDto;
     const hashedPassword = await this.authService.hashPassword(password);
     const createdStudent = new this.StudentModel({
@@ -30,7 +30,6 @@ export class StudentsService {
       email,
       userName,
       password: hashedPassword,
-      age,
       parent,
     });
     return createdStudent.save();

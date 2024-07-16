@@ -27,10 +27,6 @@ export class CreateStudentDto {
   @Length(6)
   password: string;
 
-  @IsNotEmpty()
-  @IsNumber()
-  age: number;
-
   @IsOptional()
   parent: string;
 }
