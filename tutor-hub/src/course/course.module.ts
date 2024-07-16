@@ -11,6 +11,8 @@ import {
 } from 'src/schemas/enrolledStudent.schema';
 import { Comment, CommentSchema } from 'src/schemas/comment.schema';
 import { Tutor, TutorSchema } from 'src/schemas/tutor.schema';
+import { StudentAuthModule } from 'src/auth/student-auth/student-auth.module';
+import { Student, StudentSchema } from 'src/schemas/student.schema';
 
 @Module({
   imports: [
@@ -20,8 +22,10 @@ import { Tutor, TutorSchema } from 'src/schemas/tutor.schema';
       { name: EnrolledStudent.name, schema: EnrolledStudentSchema },
     ]),
     MongooseModule.forFeature([{ name: Tutor.name, schema: TutorSchema }]),
+    MongooseModule.forFeature([{ name: Student.name, schema: StudentSchema }]),
     forwardRef(() => TutorAuthModule),
     TutorAuthModule,
+    StudentAuthModule,
   ],
   controllers: [CourseController],
   providers: [CourseService, TutorAuthService],

@@ -11,6 +11,7 @@ import { AddCommentDto } from './dto/add-comment.dto';
 import { Comment, CommentSchema } from 'src/schemas/comment.schema';
 import { Tutor } from 'src/schemas/tutor.schema';
 import { ResourceItemDto } from './dto/resource-item.dto';
+import { Student } from 'src/schemas/student.schema';
 
 @Injectable()
 export class CourseService {
@@ -20,6 +21,7 @@ export class CourseService {
     private EnrolledStudentModel: Model<EnrolledStudent>,
     @InjectModel(Comment.name) private readonly CommentModel: Model<Comment>,
     @InjectModel(Tutor.name) private TutorModel: Model<Tutor>,
+    @InjectModel(Student.name) private StudentModel: Model<Student>,
   ) {}
   async create(createCourseDto: CreateCourseDto) {
     const {
@@ -177,11 +179,16 @@ export class CourseService {
     return await foundCourse.save();
   }
   async addComment(courseId: string, addCommentDto: AddCommentDto) {
-    const { studentId, studentName, text, rating } = addCommentDto;
+    const { studentId, text, rating } = addCommentDto;
     const course = await this.CourseModel.findById(courseId);
     if (!course) {
       throw new Error('Course not found');
     }
+    const student = await this.StudentModel.findOne({ _id: studentId });
+    if (!student) {
+      throw new Error('Student not found');
+    }
+    const studentName = student.firstName + ' ' + student.lastName;
     course.comments = course.comments.filter(
       (comment) => comment.studentId !== studentId,
     );

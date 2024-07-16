@@ -19,6 +19,7 @@ import { Course } from 'src/schemas/course.schema';
 import { AddCommentDto } from './dto/add-comment.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { ResourceItemDto } from './dto/resource-item.dto';
+import { StudentJwtAuthGuard } from 'src/auth/student-auth/guards/jwt-studentAuth.guard';
 
 @Controller('course')
 export class CourseController {
@@ -68,11 +69,14 @@ export class CourseController {
     return this.courseService.dropOut(id, studentId);
   }
   @Post(':courseId/comment')
+  @UseGuards(StudentJwtAuthGuard)
   async addComment(
+    @Request() req,
     @Param('courseId') courseId: string,
     @Body()
     addCommentDto: AddCommentDto,
   ) {
+    addCommentDto.studentId = req.user.sub;
     return this.courseService.addComment(courseId, addCommentDto);
   }
 
