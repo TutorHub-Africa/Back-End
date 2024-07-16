@@ -9,7 +9,7 @@ import { ParentAuthModule } from './auth/parent-auth/parent-auth.module';
 import { TutorModule } from './users/tutor/tutor.module';
 import { ParentsModule } from './users/parents/parents.module';
 import { ConfigModule } from '@nestjs/config';
-import { CourseModule } from './course/course.module';
+import { ExamModule } from './exam/exam.module';
 
 @Module({
   imports: [
@@ -24,7 +24,7 @@ import { CourseModule } from './course/course.module';
     ParentAuthModule,
     TutorModule,
     ParentsModule,
-    CourseModule,
+    ExamModule,
   ],
   controllers: [AppController],
   providers: [AppService],
