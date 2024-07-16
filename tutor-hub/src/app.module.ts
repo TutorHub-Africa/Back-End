@@ -10,6 +10,7 @@ import { TutorModule } from './users/tutor/tutor.module';
 import { ParentsModule } from './users/parents/parents.module';
 import { ConfigModule } from '@nestjs/config';
 import { ExamModule } from './exam/exam.module';
+import { CourseModule } from './course/course.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ExamModule } from './exam/exam.module';
     TutorModule,
     ParentsModule,
     ExamModule,
+    CourseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
