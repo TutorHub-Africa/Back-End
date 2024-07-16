@@ -7,17 +7,16 @@ import {
   Param,
   Delete,
   Request,
-  UseGuards,
   Query,
 } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
 import { TutorJwtAuthGuard } from 'src/auth/tutor-auth/guards/jwt-tutorAuth.guard';
 import { EnrollCourseDto } from './dto/enroll-cours.dto';
 import { FilterCourseDto } from './dto/filter-course.dto';
 import { Course } from 'src/schemas/course.schema';
 import { AddCommentDto } from './dto/add-comment.dto';
+import { UpdateCourseDto } from './dto/update-course.dto';
 
 @Controller('course')
 export class CourseController {

@@ -21,6 +21,8 @@ import { LoginTutorDto, LoginTutorGoogleDto } from './dto/login-tutor.dto';
 import { TutorJwtAuthGuard } from 'src/auth/tutor-auth/guards/jwt-tutorAuth.guard';
 import { v4 as uuidv4 } from 'uuid';
 import { TutorGoogleAuthGuard } from 'src/auth/tutor-auth/guards/tutorAuthGoogle.guard';
+import { StudentJwtAuthGuard } from 'src/auth/student-auth/guards/jwt-studentAuth.guard';
+import { feedback } from 'src/schemas/tutor.schema';
 
 @Controller('tutor')
 export class TutorController {
@@ -104,5 +106,15 @@ export class TutorController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.tutorService.remove(+id);
+  }
+
+  @Patch('/feedback/:tutorId')
+  @UseGuards(StudentJwtAuthGuard)
+  async addFeedback(
+    @Request() req,
+    @Param('tutorId') tutorId: string,
+    @Body() feedback: feedback,
+  ) {
+    return this.tutorService.addFeedback(req.user.sub, tutorId, feedback);
   }
 }

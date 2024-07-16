@@ -32,4 +32,7 @@ export class ExamResultDto {
 
   @IsNumber()
   score: number;
+
+  @IsNumber()
+  total: number;
 }

@@ -8,7 +8,7 @@ import { EnrollCourseDto } from './dto/enroll-cours.dto';
 import { EnrolledStudent } from 'src/schemas/enrolledStudent.schema';
 import { FilterCourseDto } from './dto/filter-course.dto';
 import { AddCommentDto } from './dto/add-comment.dto';
-import { Comment, CommentSchema } from 'src/schemas/comment.schema';
+import { Comment } from 'src/schemas/comment.schema';
 
 @Injectable()
 export class CourseService {

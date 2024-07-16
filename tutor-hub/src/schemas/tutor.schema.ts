@@ -2,6 +2,28 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { SocialMedia } from './socialMedial.schema';
 
+export interface feedback {
+  studentId: string;
+  studentName: string;
+  text: string;
+  rating: number;
+}
+
+@Schema()
+class FeedbackSchema extends Document {
+  @Prop({ required: true })
+  studentId: string;
+
+  @Prop({ required: true })
+  studentName: string;
+
+  @Prop({ required: true })
+  rating: number;
+
+  @Prop({ required: true })
+  comment: string;
+}
+
 @Schema()
 export class Tutor extends Document {
   @Prop({ required: true })
@@ -39,6 +61,9 @@ export class Tutor extends Document {
 
   @Prop({ type: [String], required: true })
   skills: string[];
+
+  @Prop({ type: [FeedbackSchema], required: false })
+  feedback: feedback[];
 }
 
 export const TutorSchema = SchemaFactory.createForClass(Tutor);

@@ -19,6 +19,9 @@ export class ExamResult {
 
   @Prop({ required: true })
   score: number;
+
+  @Prop({ required: true })
+  total: number;
 }
 
 export const ExamResultSchema = SchemaFactory.createForClass(ExamResult);

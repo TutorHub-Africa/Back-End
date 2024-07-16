@@ -18,7 +18,7 @@ export class Student extends Document {
   email: string;
 
   @Prop({ required: true })
-  age: Number;
+  age: number;
 
   @Prop({ required: false })
   imageUrl: string;

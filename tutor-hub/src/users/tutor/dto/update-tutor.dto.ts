@@ -1,5 +1,7 @@
-import { IsString, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsString, IsOptional, ValidateNested } from 'class-validator';
 import { SocialMedia } from 'src/schemas/socialMedial.schema';
+import { feedback } from 'src/schemas/tutor.schema';
 
 export class UpdateTutorDto {
   @IsString()
@@ -10,7 +12,8 @@ export class UpdateTutorDto {
   @IsOptional()
   shortDescription: string;
 
-  @IsString()
+  @ValidateNested()
+  @Type(() => SocialMedia)
   @IsOptional()
   socialMedia: SocialMedia;
 
@@ -21,4 +24,7 @@ export class UpdateTutorDto {
   @IsString()
   @IsOptional()
   skills: string[];
+
+  @IsOptional()
+  feedback: feedback[];
 }

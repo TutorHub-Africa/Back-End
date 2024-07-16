@@ -2,7 +2,6 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { LogInStudentDto } from './dto/login-student.dto';
@@ -12,6 +11,7 @@ import { Student } from '../../schemas/student.schema';
 import { StudentAuthService } from 'src/auth/student-auth/student-auth.service';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { StudentAuth } from 'src/auth/student-auth/dtos/studentAuth.dto';
+import { LoginTutorGoogleDto } from '../tutor/dto/login-tutor.dto';
 
 @Injectable()
 export class StudentsService {
@@ -35,6 +35,7 @@ export class StudentsService {
     });
     return createdStudent.save();
   }
+
   async logIn(logInStudentDto: LogInStudentDto) {
     const { email, userName, password } = logInStudentDto;
     const student = await this.StudentModel.findOne({
@@ -56,6 +57,29 @@ export class StudentsService {
       new StudentAuth(student._id.toString(), student.userName, student.email),
     );
     return token;
+  }
+
+  async findByEmail(email: string) {
+    const tutorFound = await this.StudentModel.findOne({
+      $or: [{ email: email }],
+    });
+
+    if (!tutorFound) {
+      throw new NotFoundException('Tutor not found');
+    }
+
+    return tutorFound;
+  }
+
+  async logInWithGoogle(tutor: LoginTutorGoogleDto) {
+    const tutorFound = await this.findByEmail(tutor.email);
+    const logTutor = new StudentAuth(
+      tutorFound._id.toString(),
+      tutorFound.userName,
+      tutorFound.email,
+    );
+
+    return await this.authService.generateToken(logTutor);
   }
 
   async findAll() {
@@ -96,6 +120,18 @@ export class StudentsService {
     return await this.StudentModel.findByIdAndUpdate(id, updateStudentDto, {
       new: true,
     });
+  }
+
+  async ensureUniqueUsername(username: string): Promise<string> {
+    let uniqueUsername = username;
+    let count = 0;
+
+    while (await this.StudentModel.findOne({ userName: uniqueUsername })) {
+      count++;
+      uniqueUsername = `${username}${count}`;
+    }
+
+    return uniqueUsername;
   }
 
   remove(id: number) {

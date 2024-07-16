@@ -8,7 +8,7 @@ import { CreateTutorDto, createTutorGoogleDto } from './dto/create-tutor.dto';
 import { UpdateTutorDto } from './dto/update-tutor.dto';
 import { TutorAuthService } from 'src/auth/tutor-auth/tutor-auth.service';
 import { InjectModel } from '@nestjs/mongoose';
-import { Tutor } from 'src/schemas/tutor.schema';
+import { feedback, Tutor } from 'src/schemas/tutor.schema';
 import { Model } from 'mongoose';
 import { LoginTutorDto, LoginTutorGoogleDto } from './dto/login-tutor.dto';
 import { TutorAuth } from 'src/auth/tutor-auth/dtos/tutorAuth.dto';
@@ -169,5 +169,15 @@ export class TutorService {
     }
 
     return uniqueUsername;
+  }
+
+  async addFeedback(studentId: string, tutorId: string, feedback: feedback) {
+    const tutorFound = await this.findOne(tutorId);
+    if (!tutorFound) {
+      throw new NotFoundException('Tutor not found');
+    }
+
+    tutorFound.feedback = [...tutorFound.feedback, feedback];
+    return await tutorFound.save();
   }
 }
