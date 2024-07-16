@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 import { EnrolledStudent } from './enrolledStudent.schema';
+import { Comment } from './comment.schema';
 
 @Schema()
 export class Course extends Document {
@@ -14,10 +15,44 @@ export class Course extends Document {
   tutorId: string;
 
   @Prop({ type: [EnrolledStudent], default: [] })
-  privateStudents: EnrolledStudent[];
+  enrolledStudents: EnrolledStudent[];
 
-  @Prop({ type: [EnrolledStudent], default: [] })
-  groupStudents: EnrolledStudent[];
+  @Prop({ required: true })
+  grade: number;
+
+  @Prop({ required: false })
+  durationPerDay: number;
+
+  @Prop({ required: true })
+  evaluation: boolean;
+
+  @Prop({ required: true })
+  seatsRemaining: number;
+
+  @Prop({ type: MongooseSchema.Types.Mixed, default: {} })
+  resource: {
+    video?: string;
+    book?: string;
+  };
+
+  @Prop({ type: [Comment], default: [] })
+  comments: Comment[];
+
+  @Prop({ required: false, default: 0 })
+  rate: number;
 }
 
 export const CourseSchema = SchemaFactory.createForClass(Course);
+
+CourseSchema.pre<Course>('save', function (next) {
+  if (this.comments.length > 0) {
+    const totalRating = this.comments.reduce(
+      (sum, comment) => sum + comment.rating,
+      0,
+    );
+    this.rate = totalRating / this.comments.length;
+  } else {
+    this.rate = 0;
+  }
+  next();
+});
