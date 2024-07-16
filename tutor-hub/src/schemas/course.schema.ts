@@ -14,11 +14,17 @@ export class Course extends Document {
   @Prop({ required: true })
   tutorId: string;
 
+  @Prop({ required: true })
+  tutorName: string;
+
   @Prop({ type: [EnrolledStudent], default: [] })
   enrolledStudents: EnrolledStudent[];
 
   @Prop({ required: true })
   grade: number;
+
+  @Prop({ required: true })
+  fee: number;
 
   @Prop({ required: true })
   subject: string;

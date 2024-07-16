@@ -8,6 +8,7 @@ import {
   Delete,
   Request,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -23,9 +24,9 @@ export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
   @Post()
-  // @UseGuards(TutorJwtAuthGuard)
+  @UseGuards(TutorJwtAuthGuard)
   create(@Request() req, @Body() createCourseDto: CreateCourseDto) {
-    // createCourseDto.userName = req.user.userName;
+    createCourseDto.tutorId = req.user.sub;
     return this.courseService.create(createCourseDto);
   }
 

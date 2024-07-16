@@ -9,6 +9,7 @@ import { EnrolledStudent } from 'src/schemas/enrolledStudent.schema';
 import { FilterCourseDto } from './dto/filter-course.dto';
 import { AddCommentDto } from './dto/add-comment.dto';
 import { Comment, CommentSchema } from 'src/schemas/comment.schema';
+import { Tutor } from 'src/schemas/tutor.schema';
 
 @Injectable()
 export class CourseService {
@@ -17,6 +18,7 @@ export class CourseService {
     @InjectModel(EnrolledStudent.name)
     private EnrolledStudentModel: Model<EnrolledStudent>,
     @InjectModel(Comment.name) private readonly CommentModel: Model<Comment>,
+    @InjectModel(Tutor.name) private TutorModel: Model<Tutor>,
   ) {}
   async create(createCourseDto: CreateCourseDto) {
     const {
@@ -29,9 +31,13 @@ export class CourseService {
       evaluation,
       seatsRemaining,
       resource,
+      fee,
     } = createCourseDto;
+    const tutor = await this.TutorModel.findById(tutorId);
+    if (!tutor) {
+      throw new Error('Tutor not found');
+    }
 
-    // Check if the course already exists for the same tutor and title
     const existingCourse = await this.CourseModel.findOne({ tutorId, title });
     if (existingCourse) {
       throw new Error('Course already exists');
@@ -39,6 +45,7 @@ export class CourseService {
 
     // Create a new course instance
     const createdCourse = new this.CourseModel({
+      tutorName: tutor.firstName + ' ' + tutor.lastName,
       tutorId,
       title,
       description,
@@ -48,6 +55,7 @@ export class CourseService {
       subject,
       seatsRemaining,
       resource,
+      fee,
       comments: [],
     });
 

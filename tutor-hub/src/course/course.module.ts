@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { CourseController } from './course.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -10,6 +10,7 @@ import {
   EnrolledStudentSchema,
 } from 'src/schemas/enrolledStudent.schema';
 import { Comment, CommentSchema } from 'src/schemas/comment.schema';
+import { Tutor, TutorSchema } from 'src/schemas/tutor.schema';
 
 @Module({
   imports: [
@@ -18,6 +19,8 @@ import { Comment, CommentSchema } from 'src/schemas/comment.schema';
     MongooseModule.forFeature([
       { name: EnrolledStudent.name, schema: EnrolledStudentSchema },
     ]),
+    MongooseModule.forFeature([{ name: Tutor.name, schema: TutorSchema }]),
+    forwardRef(() => TutorAuthModule),
     TutorAuthModule,
   ],
   controllers: [CourseController],

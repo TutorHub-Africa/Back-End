@@ -24,8 +24,16 @@ export class CreateCourseDto {
   tutorId: string;
 
   @IsNotEmpty()
+  @IsString()
+  tutorName: string;
+
+  @IsNotEmpty()
   @IsNumber()
   grade?: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  fee: number;
 
   @IsOptional()
   @IsNumber()
