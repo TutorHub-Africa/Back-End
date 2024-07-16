@@ -8,12 +8,6 @@ async function bootstrap() {
     origin: 'http://localhost:5173',
   };
   app.enableCors(corsOptions);
-
   await app.listen(3000);
-  // app.enableCors({
-  //   origin: 'http://localhost:5173', // URL of your React frontend
-  //   credentials: true, // Allow cookies to be sent
-  // });
-  // app.enableCors();
 }
 bootstrap();

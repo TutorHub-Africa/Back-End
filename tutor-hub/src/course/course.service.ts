@@ -8,7 +8,7 @@ import { EnrollCourseDto } from './dto/enroll-cours.dto';
 import { EnrolledStudent } from 'src/schemas/enrolledStudent.schema';
 import { FilterCourseDto } from './dto/filter-course.dto';
 import { AddCommentDto } from './dto/add-comment.dto';
-import { Comment } from 'src/schemas/comment.schema';
+import { Comment, CommentSchema } from 'src/schemas/comment.schema';
 
 @Injectable()
 export class CourseService {
@@ -60,13 +60,16 @@ export class CourseService {
     return courses;
   }
   async filterCourses(filterCourseDto: FilterCourseDto) {
-    const { tutorId, grade, evaluation, durationPerDay, rate } =
+    const { tutorId, grade, evaluation, durationPerDay, rate, title } =
       filterCourseDto;
 
     const filterQuery: any = {};
 
     if (tutorId) {
       filterQuery.tutorId = tutorId;
+    }
+    if (title) {
+      filterQuery.title = { $regex: title, $options: 'i' };
     }
 
     if (grade) {
