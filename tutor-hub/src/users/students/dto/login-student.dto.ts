@@ -8,10 +8,6 @@ import {
 
 export class LogInStudentDto {
   @IsNotEmpty()
-  @IsString()
-  userName: string;
-
-  @IsNotEmpty()
   @IsEmail()
   email: string;
 

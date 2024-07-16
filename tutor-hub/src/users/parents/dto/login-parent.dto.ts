@@ -8,10 +8,6 @@ import {
 
 export class LogInParentDto {
   @IsNotEmpty()
-  @IsString()
-  userName: string;
-
-  @IsNotEmpty()
   @IsEmail()
   email: string;
 

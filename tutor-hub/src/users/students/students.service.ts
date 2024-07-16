@@ -36,10 +36,9 @@ export class StudentsService {
     return createdStudent.save();
   }
   async logIn(logInStudentDto: LogInStudentDto) {
-    const { email, userName, password } = logInStudentDto;
+    const { email, password } = logInStudentDto;
     const student = await this.StudentModel.findOne({
       email,
-      userName,
     });
     if (!student) {
       throw new BadRequestException('user not found');
