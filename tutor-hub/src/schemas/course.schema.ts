@@ -38,10 +38,32 @@ export class Course extends Document {
   @Prop({ required: true })
   seatsRemaining: number;
 
-  @Prop({ type: MongooseSchema.Types.Mixed, default: {} })
-  resource: {
-    video?: string;
-    book?: string;
+  // @Prop({ type: MongooseSchema.Types.Mixed, default: {} })
+  // resource: {
+  //   video?: string;
+  //   book?: string;
+  // };
+
+  @Prop({
+    type: {
+      video: [
+        {
+          title: { type: String, required: true },
+          url: { type: String, required: true },
+        },
+      ],
+      book: [
+        {
+          title: { type: String, required: true },
+          url: { type: String, required: true },
+        },
+      ],
+    },
+    default: {},
+  })
+  resources: {
+    video?: { title: string; url: string }[];
+    book?: { title: string; url: string }[];
   };
 
   @Prop({ type: [Comment], default: [] })

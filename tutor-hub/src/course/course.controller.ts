@@ -18,6 +18,7 @@ import { FilterCourseDto } from './dto/filter-course.dto';
 import { Course } from 'src/schemas/course.schema';
 import { AddCommentDto } from './dto/add-comment.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
+import { ResourceItemDto } from './dto/resource-item.dto';
 
 @Controller('course')
 export class CourseController {
@@ -45,6 +46,13 @@ export class CourseController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.courseService.findOne(id);
+  }
+  @Post(':id/resources')
+  addResource(
+    @Param('id') id: string,
+    @Body() resourceItemDto: ResourceItemDto,
+  ) {
+    return this.courseService.addResource(id, resourceItemDto);
   }
 
   @Post(':id/enroll')

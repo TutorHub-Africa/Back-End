@@ -10,6 +10,7 @@ import { FilterCourseDto } from './dto/filter-course.dto';
 import { AddCommentDto } from './dto/add-comment.dto';
 import { Comment, CommentSchema } from 'src/schemas/comment.schema';
 import { Tutor } from 'src/schemas/tutor.schema';
+import { ResourceItemDto } from './dto/resource-item.dto';
 
 @Injectable()
 export class CourseService {
@@ -30,7 +31,6 @@ export class CourseService {
       durationPerDay,
       evaluation,
       seatsRemaining,
-      resource,
       fee,
     } = createCourseDto;
     const tutor = await this.TutorModel.findById(tutorId);
@@ -54,7 +54,6 @@ export class CourseService {
       evaluation,
       subject,
       seatsRemaining,
-      resource,
       fee,
       comments: [],
     });
@@ -115,6 +114,26 @@ export class CourseService {
     }
     return foundCourse;
   }
+  async addResource(id: string, resourceItemDto: ResourceItemDto) {
+    const foundCourse = await this.CourseModel.findOne({ _id: id });
+    if (!foundCourse) {
+      throw new Error('Course not found');
+    }
+    const { type, title, url } = resourceItemDto;
+    if (!type || !title || !url) {
+      throw new Error('Invalid resource item');
+    }
+    const resource = { title, url };
+    if (type === 'video') {
+      foundCourse.resources.video.push(resource);
+    } else if (type === 'book') {
+      foundCourse.resources.book.push(resource);
+    } else {
+      throw new Error('Invalid resource type');
+    }
+    return await foundCourse.save();
+  }
+
   async enroll(id: string, enrollCourseDto: EnrollCourseDto) {
     const foundCourse = await this.CourseModel.findOne({ _id: id });
     if (!foundCourse) {

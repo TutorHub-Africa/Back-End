@@ -46,10 +46,4 @@ export class CreateCourseDto {
   @IsNotEmpty()
   @IsNumber()
   seatsRemaining: number;
-
-  @IsOptional()
-  resource?: {
-    video?: string[];
-    book?: string[];
-  };
 }
