@@ -34,16 +34,16 @@ export class CourseController {
     return this.courseService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.courseService.findOne(id);
-  }
-
   @Get('filter')
   async filterCourses(
     @Query() filterCourseDto: FilterCourseDto,
   ): Promise<Course[]> {
     return this.courseService.filterCourses(filterCourseDto);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.courseService.findOne(id);
   }
 
   @Post(':id/enroll')

@@ -1,13 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-<<<<<<< HEAD
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
-=======
-import * as dotenv from 'dotenv';
->>>>>>> a95385baadb9a8bc89ae33c376b6bc0b0b6a6ce5
 
 async function bootstrap() {
-  dotenv.config();
   const app = await NestFactory.create(AppModule);
   const corsOptions: CorsOptions = {
     origin: 'http://localhost:5173',
