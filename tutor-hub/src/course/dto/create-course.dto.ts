@@ -11,6 +11,10 @@ export class CreateCourseDto {
   @IsString()
   title: string;
 
+  @IsNotEmpty()
+  @IsString()
+  subject: string;
+
   @IsOptional()
   @IsString()
   description?: string;

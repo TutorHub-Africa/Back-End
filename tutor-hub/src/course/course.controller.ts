@@ -25,7 +25,7 @@ export class CourseController {
   @Post()
   // @UseGuards(TutorJwtAuthGuard)
   create(@Request() req, @Body() createCourseDto: CreateCourseDto) {
-    // createCourseDto.tutorId = req.user.sub;
+    // createCourseDto.userName = req.user.userName;
     return this.courseService.create(createCourseDto);
   }
 

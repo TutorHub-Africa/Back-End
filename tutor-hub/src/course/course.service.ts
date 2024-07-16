@@ -23,6 +23,7 @@ export class CourseService {
       tutorId,
       title,
       description,
+      subject,
       grade,
       durationPerDay,
       evaluation,
@@ -44,6 +45,7 @@ export class CourseService {
       grade,
       durationPerDay,
       evaluation,
+      subject,
       seatsRemaining,
       resource,
       comments: [],
@@ -60,13 +62,16 @@ export class CourseService {
     return courses;
   }
   async filterCourses(filterCourseDto: FilterCourseDto) {
-    const { tutorId, grade, evaluation, durationPerDay, rate, title } =
+    const { tutorId, grade, evaluation, durationPerDay, rate, title, subject } =
       filterCourseDto;
 
     const filterQuery: any = {};
 
     if (tutorId) {
       filterQuery.tutorId = tutorId;
+    }
+    if (subject) {
+      filterQuery.subject = subject;
     }
     if (title) {
       filterQuery.title = { $regex: title, $options: 'i' };

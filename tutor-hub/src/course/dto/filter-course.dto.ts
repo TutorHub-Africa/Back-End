@@ -4,9 +4,14 @@ export class FilterCourseDto {
   @IsOptional()
   @IsString()
   tutorId?: string;
+
   @IsOptional()
   @IsString()
   title?: string;
+
+  @IsOptional()
+  @IsString()
+  subject: string;
 
   @IsOptional()
   @IsNumber()

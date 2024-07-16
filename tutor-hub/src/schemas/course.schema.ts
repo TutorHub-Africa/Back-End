@@ -20,6 +20,9 @@ export class Course extends Document {
   @Prop({ required: true })
   grade: number;
 
+  @Prop({ required: true })
+  subject: string;
+
   @Prop({ required: false })
   durationPerDay: number;
 
