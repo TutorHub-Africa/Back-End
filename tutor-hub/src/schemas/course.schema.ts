@@ -29,10 +29,10 @@ export class Course extends Document {
   @Prop({ required: true })
   subject: string;
 
-  @Prop({ required: false })
+  @Prop({ required: true })
   durationPerDay: number;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   evaluation: boolean;
 
   @Prop({ required: true })
@@ -71,6 +71,9 @@ export class Course extends Document {
 
   @Prop({ required: false, default: 0 })
   rate: number;
+
+  @Prop({ required: false, default: '' })
+  image: string;
 }
 
 export const CourseSchema = SchemaFactory.createForClass(Course);
