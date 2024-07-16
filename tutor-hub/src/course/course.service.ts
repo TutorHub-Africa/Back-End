@@ -85,8 +85,8 @@ export class CourseService {
       filterQuery.evaluation = evaluation;
     }
 
-    if (durationPerDay) {
-      filterQuery.durationPerDay = durationPerDay;
+    if (durationPerDay !== undefined) {
+      filterQuery.durationPerDay = { $lte: durationPerDay };
     }
 
     if (rate !== undefined) {
