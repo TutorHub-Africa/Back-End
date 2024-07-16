@@ -82,6 +82,11 @@ export class TutorController {
     return this.tutorService.findOne(id);
   }
 
+  @Get('/:id')
+  findWithId(@Param('id') id: string) {
+    return this.tutorService.findOne(id);
+  }
+
   @Patch('/update-profile')
   @UseGuards(TutorJwtAuthGuard)
   update(@Request() req, @Body() updateTutorDto: UpdateTutorDto) {
