@@ -32,10 +32,9 @@ export class ParentsService {
     return createdParent.save();
   }
   async logIn(logInParentDto: LogInParentDto) {
-    const { email, userName, password } = logInParentDto;
+    const { email, password } = logInParentDto;
     const Parent = await this.ParentModel.findOne({
       email,
-      userName,
     });
     if (!Parent) {
       throw new BadRequestException('user not found');
