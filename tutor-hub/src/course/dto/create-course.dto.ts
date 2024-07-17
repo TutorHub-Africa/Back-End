@@ -23,6 +23,10 @@ export class CreateCourseDto {
   @IsString()
   tutorId: string;
 
+  @IsOptional()
+  @IsString()
+  image: string;
+
   @IsNotEmpty()
   @IsString()
   tutorName: string;

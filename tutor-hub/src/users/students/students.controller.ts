@@ -20,7 +20,7 @@ import { StudentJwtAuthGuard } from 'src/auth/student-auth/guards/jwt-studentAut
 import { v4 as uuidv4 } from 'uuid';
 import { diskStorage } from 'multer';
 
-@Controller('students')
+@Controller('student')
 export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 

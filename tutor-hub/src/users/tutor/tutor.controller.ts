@@ -122,4 +122,13 @@ export class TutorController {
   ) {
     return this.tutorService.addFeedback(req.user.sub, tutorId, feedback);
   }
+
+  // @Post('/message/send')
+  // @UseGuards(StudentJwtAuthGuard)
+  // async sendMessage(@Request() req, @Body() message: SendMessageDto) {
+  //   const sender = req.user.sub;
+  //   const messageDto = { sender, ...message };
+
+  //   return this.messageService.create(messageDto);
+  // }
 }
